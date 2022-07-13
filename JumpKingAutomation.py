@@ -12,7 +12,7 @@ clock = pygame.time.Clock()
 
 GRAVITY = 300
 TERMINAL_VELOCITY = 800
-AI_BUCKET = 10
+AI_BUCKET = 1
 AI_COUNT = 50
 
 
@@ -229,7 +229,8 @@ class AI(Player):
 
             if self.jumpRecord["avgScore"] > 0:
                 if str((roundX, roundY)) in AI.jumpDB:
-                    AI.jumpDB[str((roundX, roundY))].append(self.jumpRecord)
+                    if AI.jumpDB[str((roundX, roundY))][0]["avgScore"] < self.jumpRecord["avgScore"]:
+                        AI.jumpDB[str((roundX, roundY))] = [(self.jumpRecord)]
                 else:
                     AI.jumpDB[str((roundX, roundY))] = [(self.jumpRecord)]
 
@@ -281,31 +282,31 @@ class AI(Player):
                 minY = max(0, bestJumpY["yInput"] - (0.5 * yPerc))
                 maxY = min(1, bestJumpY["yInput"] + (0.5 * yPerc))
 
-                for r in recList:
-                    xEffect, yEffect = (0, 0)
-                    if r["xScore"] > 0:
-                        xEffect = r["xInput"]
-                    else:
-                        xEffect = r["xInput"] / (2 - r["xScore"])
-                    if r["yScore"] > 0.1:
-                        yEffect = r["yInput"]
-                    elif r["yScore"] >= 0:
-                        yEffect = 1 - r["yInput"]
+                # for r in recList:
+                #     xEffect, yEffect = (0,0)
+                #     if r["xScore"] > 0:
+                #         xEffect = r["xInput"]
+                #     else:
+                #         xEffect = r["xInput"]/(2-r["xScore"])
+                #     if r["yScore"] > 0.1:
+                #         yEffect = r["yInput"]
+                #     elif r["yScore"] >= 0:
+                #         yEffect = 1 - r["yInput"]
 
-                    if xEffect < maxX and xEffect > minX:
-                        maxX = ((maxX * (rLen - 1)) + xEffect) / (rLen)
-                        # elif xEffect > minX:
-                        minX = ((minX * (rLen - 1)) + xEffect) / (rLen)
-                    if yEffect < maxY and yEffect > minY:
-                        maxY = ((maxY * (rLen - 1)) + yEffect) / (rLen)
-                        # elif yEffect < minY:
-                        minY = ((minY * (rLen - 1)) + yEffect) / (rLen)
+                #     if xEffect < maxX and xEffect > minX:
+                #          maxX = ((maxX * (rLen-1)) + xEffect) / (rLen)
+                #     # elif xEffect > minX:
+                #          minX = ((minX * (rLen-1)) + xEffect) / (rLen)
+                #     if yEffect < maxY and yEffect > minY:
+                #         maxY = ((maxY * (rLen - 1)) + yEffect) / (rLen)
+                #     # elif yEffect < minY:
+                #         minY = ((minY * (rLen - 1)) + yEffect) / (rLen)
 
-                    # else:
-                    #     if r["yInput"] > maxY:
-                    #         maxY = ((maxY * (rLen - 1)) + (r["yInput"])) / (rLen)
-                    #     elif r["yInput"] < minX:
-                    #         minY = ((minY * (rLen - 1)) + (r["yInput"])) / (rLen)
+                # else:
+                #     if r["yInput"] > maxY:
+                #         maxY = ((maxY * (rLen - 1)) + (r["yInput"])) / (rLen)
+                #     elif r["yInput"] < minX:
+                #         minY = ((minY * (rLen - 1)) + (r["yInput"])) / (rLen)
                 # minX /= len(recList)+1
                 # maxX /= len(recList)+1
                 # minY /= len(recList)+1
